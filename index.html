@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRAN MALO | El Desmadre Ya Está Aquí</title>
+  <!-- Google Fonts: Syne & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES & PALETA GRAN MALO NEÓN
+       - Tamarindo: #56070c + neón carmesí (#ff1e42)
+       - Horchata:  #ffffff (Blanco) + #c7762c (Canela/Ámbar) + neón cálido (#ffae42)
+       - Jamaica:   #e00000 (Rojo Jamaica) + neón rojo eléctrico (#ff3333)
+       ========================================================================== */
+    :root {
+      --bg-void: #000000;
+      --bg-deep: #090204;
+
+      /* Colores base solicitados */
+      --color-tamarindo: #56070c;
+      --color-jamaica: #e00000;
+      --color-horchata-tan: #c7762c;
+      --color-horchata-white: #ffffff;
+
+      /* Toques Neón de alto contraste */
+      --neon-tamarindo: #ff1e42;
+      --neon-jamaica: #ff2a2a;
+      --neon-horchata: #ffae42;
+
+      --text-primary: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.76);
+      --glass-bg: rgba(28, 4, 8, 0.55);
+      --glass-border: rgba(224, 0, 0, 0.32);
+
+      /* Variables dinámicas reactivas al sabor activo (Inicia en Tamarindo) */
+      --active-base: #56070c;
+      --active-accent: #ff1e42;
+      --active-secondary: #e00000;
+      --active-surface: rgba(86, 7, 12, 0.65);
+      --light-x: 50%;
+      --light-y: 50%;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #000000;
+      color: var(--text-primary);
+      font-family: 'Space Grotesk', Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Bloquea el scroll y oculta el contenido durante los 10 segundos del preloader */
+    body.is-loading {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    body.is-loading main,
+    body.is-loading .navbar,
+    body.is-loading .site-footer {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    main,
+    .navbar,
+    .site-footer {
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    /* ==========================================================================
+       1. PRELOADER DE 10 SEGUNDOS (CON LA PALETA #e00000, #ffffff/#c7762c, #56070c + NEÓN)
+       ========================================================================== */
+    #preloader-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+      z-index: 99999;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    #preloader-wrapper.fade-out,
+    #load.fade-out {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+
+    #load {
+      position: absolute;
+      width: 600px;
+      height: 36px;
+      left: 50%;
+      top: 40%;
+      margin-left: -300px;
+      overflow: visible;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: default;
+      z-index: 99999;
+      transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+      filter: drop-shadow(0 0 14px rgba(224, 0, 0, 0.55));
+    }
+
+    @media (max-width: 650px) {
+      #load {
+        transform: scale(0.55);
+        transform-origin: center center;
+      }
+    }
+
+    #load div {
+      position: absolute;
+      width: 20px;
+      height: 36px;
+      opacity: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: 2px;
+      animation: move 2s linear infinite;
+      -o-animation: move 2s linear infinite;
+      -moz-animation: move 2s linear infinite;
+      -webkit-animation: move 2s linear infinite;
+      transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -webkit-transform: rotate(180deg);
+      color: #e00000;
+      text-shadow: 0 0 10px rgba(224, 0, 0, 0.9), 0 0 22px rgba(86, 7, 12, 0.9);
+    }
+
+    /* Alternancia de los colores Jamaica (#e00000), Horchata (#ffffff + #c7762c) y Tamarindo (#56070c + neón) */
+    #load div:nth-child(1) {
+      color: #e00000;
+      /* Jamaica */
+      text-shadow: 0 0 10px #e00000, 0 0 25px #ff2a2a;
+    }
+
+    #load div:nth-child(2) {
+      animation-delay: 0.2s;
+      -o-animation-delay: 0.2s;
+      -moz-animation-delay: 0.2s;
+      -webkit-animation-delay: 0.2s;
+      color: #ffffff;
+      /* Horchata Blanco con brillo #c7762c */
+      text-shadow: 0 0 10px #c7762c, 0 0 24px #ffae42;
+    }
+
+    #load div:nth-child(3) {
+      animation-delay: 0.4s;
+      -o-animation-delay: 0.4s;
+      -moz-animation-delay: 0.4s;
+      -webkit-animation-delay: 0.4s;
+      color: #c7762c;
+      /* Horchata Canela */
+      text-shadow: 0 0 10px #c7762c, 0 0 24px #ffffff;
+    }
+
+    #load div:nth-child(4) {
+      animation-delay: 0.6s;
+      -o-animation-delay: 0.6s;
+      -moz-animation-delay: 0.6s;
+      -webkit-animation-delay: 0.6s;
+      color: #ff1e42;
+      /* Tamarindo #56070c con núcleo neón */
+      text-shadow: 0 0 12px #56070c, 0 0 26px #ff1e42;
+    }
+
+    #load div:nth-child(5) {
+      animation-delay: 0.8s;
+      -o-animation-delay: 0.8s;
+      -moz-animation-delay: 0.8s;
+      -webkit-animation-delay: 0.8s;
+      color: #e00000;
+      /* Jamaica */
+      text-shadow: 0 0 10px #e00000, 0 0 25px #ff2a2a;
+    }
+
+    #load div:nth-child(6) {
+      animation-delay: 1s;
+      -o-animation-delay: 1s;
+      -moz-animation-delay: 1s;
+      -webkit-animation-delay: 1s;
+      color: #ffffff;
+      /* Horchata Blanco + #c7762c */
+      text-shadow: 0 0 12px #c7762c, 0 0 25px #c7762c;
+    }
+
+    #load div:nth-child(7) {
+      animation-delay: 1.2s;
+      -o-animation-delay: 1.2s;
+      -moz-animation-delay: 1.2s;
+      -webkit-animation-delay: 1.2s;
+      color: #ff1e42;
+      /* Tamarindo #56070c neón */
+      text-shadow: 0 0 12px #56070c, 0 0 28px #e00000;
+    }
+
+    @keyframes move {
+      0% {
+        left: 0;
+        opacity: 0;
+      }
+
+      35% {
+        left: 41%;
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      65% {
+        left: 59%;
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        left: 100%;
+        transform: rotate(-180deg);
+        opacity: 0;
+      }
+    }
+
+    @-webkit-keyframes move {
+      0% {
+        left: 0;
+        opacity: 0;
+      }
+
+      35% {
+        left: 41%;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      65% {
+        left: 59%;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        left: 100%;
+        -webkit-transform: rotate(-180deg);
+        transform: rotate(-180deg);
+        opacity: 0;
+      }
+    }
+
+    @-moz-keyframes move {
+      0% {
+        left: 0;
+        opacity: 0;
+      }
+
+      35% {
+        left: 41%;
+        -moz-transform: rotate(0deg);
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      65% {
+        left: 59%;
+        -moz-transform: rotate(0deg);
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        left: 100%;
+        -moz-transform: rotate(-180deg);
+        transform: rotate(-180deg);
+        opacity: 0;
+      }
+    }
+
+    @-o-keyframes move {
+      0% {
+        left: 0;
+        opacity: 0;
+      }
+
+      35% {
+        left: 41%;
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      65% {
+        left: 59%;
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        left: 100%;
+        -o-transform: rotate(-180deg);
+        transform: rotate(-180deg);
+        opacity: 0;
+      }
+    }
+
+    /* ==========================================================================
+       2. ATMÓSFERA GLOBAL & NAVEGACIÓN GLASSMORPHISM
+       ========================================================================== */
+    .ambient-noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 90;
+      opacity: 0.04;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 0);
+      background-size: 3px 3px;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 1200px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      background: rgba(34, 4, 7, 0.65);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(224, 0, 0, 0.35);
+      border-radius: 999px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 22px rgba(86, 7, 12, 0.8);
+    }
+
+    .brand-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-decoration: none;
+      text-shadow: 0 0 12px #e00000, 0 0 24px #c7762c;
+    }
+
+    .nav-links {
+      display: none;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      text-shadow: 0 0 10px #c7762c, 0 0 20px #e00000;
+    }
+
+    .age-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #c7762c;
+      color: #ffffff;
+      background: rgba(86, 7, 12, 0.7);
+      text-shadow: 0 0 8px #c7762c;
+      box-shadow: 0 0 12px rgba(199, 118, 44, 0.45);
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+
+      .brand-logo {
+        font-size: 1.45rem;
+      }
+    }
+
+    /* ==========================================================================
+       3. HERO SECTION (100VH, GRADIENTE ANIMADO CON #56070c, #e00000 y #c7762c)
+       ========================================================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 20px 60px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 25%, rgba(224, 0, 0, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 82% 72%, rgba(199, 118, 44, 0.32) 0%, transparent 48%),
+        radial-gradient(circle at 50% 50%, rgba(86, 7, 12, 0.85) 0%, #050102 75%);
+      background-size: 160% 160%;
+      animation: euphoriaPulse 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes euphoriaPulse {
+      0% {
+        background-position: 0% 20%;
+      }
+
+      50% {
+        background-position: 100% 80%;
+      }
+
+      100% {
+        background-position: 30% 50%;
+      }
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      pointer-events: none;
+      opacity: 0.65;
+      z-index: 1;
+    }
+
+    .hero-orb--jamaica {
+      width: 350px;
+      height: 350px;
+      background: #e00000;
+      top: 10%;
+      left: -80px;
+      animation: floatOrb 8s ease-in-out infinite alternate;
+    }
+
+    .hero-orb--horchata {
+      width: 320px;
+      height: 320px;
+      background: #c7762c;
+      bottom: 8%;
+      right: -70px;
+      animation: floatOrb 11s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes floatOrb {
+      from {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      to {
+        transform: translate3d(40px, -35px, 0) scale(1.15);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 920px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(86, 7, 12, 0.75);
+      border: 1px solid #c7762c;
+      backdrop-filter: blur(10px);
+      font-size: 0.78rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(224, 0, 0, 0.45);
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.5rem, 7.5vw, 6.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow:
+        0 0 18px rgba(224, 0, 0, 0.85),
+        0 0 42px rgba(86, 7, 12, 0.95),
+        0 0 75px rgba(199, 118, 44, 0.55);
+    }
+
+    .hero-title span {
+      display: block;
+      color: #ffffff;
+      text-shadow:
+        0 0 6px #c7762c,
+        0 0 16px #c7762c,
+        0 0 32px rgba(199, 118, 44, 0.75);
+      animation: horchataNeonFlicker 3s infinite;
+    }
+
+    @keyframes horchataNeonFlicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 76%, 100% {
+        color: #ffffff;
+        text-shadow:
+          0 0 6px #c7762c,
+          0 0 16px #c7762c,
+          0 0 32px rgba(199, 118, 44, 0.75);
+      }
+      20%, 24%, 55%, 74% {
+        color: #c7762c;
+        opacity: 0.35;
+        text-shadow: none;
+      }
+      72% {
+        color: #fff5eb;
+        opacity: 0.85;
+        text-shadow:
+          0 0 6px #c7762c,
+          0 0 14px rgba(199, 118, 44, 0.5);
+      }
+    }
+
+    .hero-subtitle {
+      max-width: 580px;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      color: var(--text-muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .btn-neon {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #ffffff;
+      background: linear-gradient(135deg, #56070c 0%, #e00000 52%, #c7762c 100%);
+      background-size: 200% 200%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow:
+        0 0 24px rgba(224, 0, 0, 0.75),
+        0 0 45px rgba(86, 7, 12, 0.85),
+        inset 0 0 14px rgba(255, 255, 255, 0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.5s ease;
+      cursor: pointer;
+    }
+
+    .btn-neon:hover {
+      transform: translateY(-3px) scale(1.03);
+      background-position: 100% 50%;
+      box-shadow:
+        0 0 32px rgba(199, 118, 44, 0.9),
+        0 0 65px rgba(224, 0, 0, 0.85);
+    }
+
+    .btn-glass {
+      display: inline-flex;
+      align-items: center;
+      padding: 16px 30px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #ffffff;
+      background: rgba(86, 7, 12, 0.45);
+      backdrop-filter: blur(14px);
+      border: 1px solid #c7762c;
+      transition: all 0.3s ease;
+    }
+
+    .btn-glass:hover {
+      background: rgba(199, 118, 44, 0.25);
+      box-shadow: 0 0 24px rgba(199, 118, 44, 0.65);
+    }
+
+    /* ==========================================================================
+       4. SECCIÓN DE EXHIBICIÓN DE PRODUCTOS (VISOR 3D INTERACTIVO)
+       ========================================================================== */
+    .products-section {
+      position: relative;
+      padding: 100px 20px;
+      background: linear-gradient(180deg, #050102 0%, #160305 50%, #050102 100%);
+      overflow: hidden;
+    }
+
+    .dynamic-stage-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--light-x, 50%) var(--light-y, 45%), var(--active-base) 0%, var(--active-accent) 30%, transparent 62%),
+        radial-gradient(circle at 75% 30%, var(--active-secondary) 0%, transparent 58%);
+      opacity: 0.38;
+      transition: background 0.6s ease;
+      filter: blur(65px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: #c7762c;
+      text-shadow: 0 0 12px rgba(199, 118, 44, 0.8);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      text-shadow: 0 0 18px rgba(224, 0, 0, 0.75), 0 0 36px rgba(86, 7, 12, 0.9);
+    }
+
+    /* Controles de selección de sabor */
+    .flavor-selector {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 44px;
+    }
+
+    .flavor-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(28, 4, 8, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: var(--text-muted);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .flavor-btn::before {
+      content: '';
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .flavor-btn[data-flavor="tamarindo"]::before {
+      background: #56070c;
+      box-shadow: 0 0 8px #ff1e42;
+      border: 1px solid #ff1e42;
+    }
+
+    .flavor-btn[data-flavor="horchata"]::before {
+      background: linear-gradient(135deg, #ffffff 45%, #c7762c 55%);
+      box-shadow: 0 0 8px #c7762c;
+      border: 1px solid #ffffff;
+    }
+
+    .flavor-btn[data-flavor="jamaica"]::before {
+      background: #e00000;
+      box-shadow: 0 0 10px #e00000;
+      border: 1px solid #ff4d4d;
+    }
+
+    .flavor-btn.active {
+      color: #ffffff;
+      border-color: var(--active-accent);
+      background: linear-gradient(135deg, var(--active-base) 0%, var(--active-surface) 100%);
+      box-shadow:
+        0 0 24px var(--active-accent),
+        0 0 42px var(--active-base),
+        inset 0 0 14px rgba(255, 255, 255, 0.28);
+      transform: translateY(-2px);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (min-width: 960px) {
+      .showcase-grid {
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 64px;
+      }
+    }
+
+    .viewer-3d-stage {
+      perspective: 1300px;
+      -webkit-perspective: 1300px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .viewer-3d-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      min-height: 540px;
+      border-radius: 32px;
+      background: linear-gradient(145deg, var(--active-surface), rgba(8, 2, 4, 0.9));
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--active-accent);
+      box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.85),
+        0 0 45px var(--active-base),
+        0 0 24px var(--active-accent);
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease, border-color 0.5s ease, background 0.6s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .viewer-3d-card.is-spinning-3d {
+      animation: spatialFlip3D 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes spatialFlip3D {
+      0% {
+        transform: rotateY(0deg) rotateX(0deg) scale(1);
+      }
+
+      45% {
+        transform: rotateY(190deg) rotateX(12deg) translateZ(60px) scale(0.92);
+      }
+
+      100% {
+        transform: rotateY(360deg) rotateX(0deg) scale(1);
+      }
+    }
+
+    .viewer-lighting-sheen {
+      position: absolute;
+      inset: 0;
+      border-radius: 32px;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 40%),
+          rgba(255, 255, 255, 0.25) 0%,
+          var(--active-accent) 26%,
+          transparent 68%);
+      mix-blend-mode: screen;
+      opacity: 0.48;
+      transition: background 0.2s ease, opacity 0.4s ease;
+      transform: translateZ(10px);
+    }
+
+    .parallax-aura-ring {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--active-surface) 0%, transparent 72%);
+      border: 2px solid var(--active-accent);
+      box-shadow:
+        0 0 38px var(--active-accent),
+        0 0 65px var(--active-base),
+        inset 0 0 35px var(--active-secondary);
+      transform: translateZ(20px);
+      transition: all 0.5s ease;
+    }
+
+    .parallax-floating-badge {
+      position: absolute;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--active-base), rgba(10, 2, 4, 0.92));
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--active-accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), 0 0 18px var(--active-accent);
+      transform: translateZ(85px);
+      pointer-events: none;
+      transition: all 0.45s ease;
+    }
+
+    .parallax-floating-badge--top {
+      top: 28px;
+      right: 24px;
+    }
+
+    .parallax-floating-badge--bottom {
+      bottom: 28px;
+      left: 24px;
+    }
+
+    /* Contenedor de los renders de botellas (orientación vertical retrato) */
+    .product-render-slot {
+      position: relative;
+      width: 260px;
+      aspect-ratio: 3 / 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateZ(115px);
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .product-image-placeholder {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      aspect-ratio: 3 / 5;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(18px) scale(0.88) rotateY(-25deg);
+      filter:
+        drop-shadow(0 24px 28px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 28px var(--active-accent)) drop-shadow(0 0 48px var(--active-base));
+      transition:
+        opacity 0.55s ease,
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.55s ease;
+    }
+
+    .product-image-placeholder.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1) rotateY(0deg);
+    }
+
+    .camera-angle-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .angle-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(86, 7, 12, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .angle-btn.active,
+    .angle-btn:hover {
+      color: #ffffff;
+      border-color: var(--active-accent);
+      background: var(--active-surface);
+      box-shadow: 0 0 16px var(--active-accent);
+    }
+
+    .product-details-panel {
+      background: linear-gradient(155deg, var(--active-surface) 0%, rgba(12, 3, 5, 0.85) 72%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--active-accent);
+      border-radius: 28px;
+      padding: 36px 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 34px var(--active-base);
+      transition: background 0.6s ease, border-color 0.5s ease, box-shadow 0.6s ease;
+    }
+
+    .flavor-subtitle {
+      font-size: 0.8rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--active-accent);
+      text-shadow: 0 0 12px var(--active-accent);
+      margin-bottom: 8px;
+    }
+
+    .flavor-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      line-height: 1.05;
+      text-shadow: 0 0 18px var(--active-base);
+    }
+
+    .flavor-description {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 28px;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .spec-box {
+      padding: 14px 12px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.38);
+      border: 1px solid var(--active-accent);
+      text-align: center;
+      box-shadow: inset 0 0 14px var(--active-surface);
+      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .spec-label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .spec-value {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #ffffff;
+      text-shadow: 0 0 10px var(--active-accent);
+    }
+
+    .btn-flavor-cta {
+      background: linear-gradient(135deg, var(--active-base) 0%, var(--active-accent) 60%, var(--active-secondary) 100%);
+      box-shadow:
+        0 0 24px var(--active-accent),
+        0 0 45px var(--active-base),
+        inset 0 0 14px rgba(255, 255, 255, 0.35);
+    }
+
+    /* ==========================================================================
+       5. SECCIÓN DE "VIBE" (CUADRÍCULA ASIMÉTRICA CON LOS 3 COLORES INSIGNIA)
+       ========================================================================== */
+    .vibe-section {
+      padding: 100px 20px;
+      background: linear-gradient(180deg, #050102 0%, #120204 50%, #050102 100%);
+      position: relative;
+    }
+
+    .vibe-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      auto-rows: 280px;
+    }
+
+    @media (min-width: 768px) {
+      .vibe-grid {
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: 260px;
+        gap: 22px;
+      }
+
+      .vibe-card--1 {
+        grid-column: span 7;
+        grid-row: span 2;
+      }
+
+      .vibe-card--2 {
+        grid-column: span 5;
+        grid-row: span 1;
+      }
+
+      .vibe-card--3 {
+        grid-column: span 5;
+        grid-row: span 2;
+      }
+
+      .vibe-card--4 {
+        grid-column: span 7;
+        grid-row: span 1;
+      }
+    }
+
+    .vibe-card {
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      background: #140305;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75);
+    }
+
+    .vibe-card--1 {
+      border: 1px solid #e00000;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(224, 0, 0, 0.3);
+    }
+
+    .vibe-card--2 {
+      border: 1px solid #c7762c;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(199, 118, 44, 0.3);
+    }
+
+    .vibe-card--3 {
+      border: 1px solid #ff1e42;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(86, 7, 12, 0.7);
+    }
+
+    .vibe-card--4 {
+      border: 1px solid #ffffff;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(199, 118, 44, 0.35);
+    }
+
+    .vibe-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+      filter: contrast(1.12) saturate(1.2);
+    }
+
+    .vibe-card:hover img {
+      transform: scale(1.07);
+      filter: contrast(1.2) saturate(1.4);
+    }
+
+    .vibe-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(18, 2, 4, 0.92) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+    }
+
+    .vibe-tag {
+      align-self: flex-start;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(86, 7, 12, 0.78);
+      backdrop-filter: blur(8px);
+      border: 1px solid #e00000;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 8px;
+      box-shadow: 0 0 12px rgba(224, 0, 0, 0.5);
+    }
+
+    .vibe-card--2 .vibe-tag,
+    .vibe-card--4 .vibe-tag {
+      background: rgba(199, 118, 44, 0.35);
+      border-color: #ffffff;
+      box-shadow: 0 0 12px rgba(199, 118, 44, 0.65);
+    }
+
+    .vibe-caption {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      text-shadow: 0 0 14px rgba(224, 0, 0, 0.75);
+    }
+
+    /* ==========================================================================
+       6. FOOTER (+18 CONSUMO RESPONSABLE)
+       ========================================================================== */
+    .site-footer {
+      padding: 70px 20px 40px;
+      background: linear-gradient(180deg, #050102 0%, #000000 100%);
+      border-top: 1px solid rgba(224, 0, 0, 0.35);
+    }
+
+    .footer-top {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(199, 118, 44, 0.22);
+    }
+
+    @media (min-width: 768px) {
+      .footer-top {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #c7762c;
+      text-shadow: 0 0 10px #c7762c;
+    }
+
+    .responsible-banner {
+      margin-top: 32px;
+      padding: 18px 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(86, 7, 12, 0.55), rgba(224, 0, 0, 0.12));
+      border: 1px solid #c7762c;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 0 24px rgba(86, 7, 12, 0.65);
+    }
+
+    .responsible-banner strong {
+      letter-spacing: 0.2em;
+      font-size: 0.85rem;
+      color: #ffffff;
+      text-shadow: 0 0 10px #e00000, 0 0 18px #c7762c;
+    }
+
+    .responsible-banner p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body class="is-loading">
+
+  <!-- ========================================================================
+       1. PANTALLA DE CARGA (PRELOADER OBLIGATORIO DE 10 SEGUNDOS)
+       ======================================================================== -->
+  <div id="preloader-wrapper" aria-live="polite" aria-label="Cargando experiencia Gran Malo">
+    <div id="load">
+      <div>G</div>
+      <div>N</div>
+      <div>I</div>
+      <div>D</div>
+      <div>A</div>
+      <div>O</div>
+      <div>L</div>
+    </div>
+  </div>
+
+  <!-- Ruido cinematográfico -->
+  <div class="ambient-noise"></div>
+
+  <!-- ========================================================================
+       NAVEGACIÓN GLASSMORPHISM
+       ======================================================================== -->
+  <header class="navbar">
+    <a href="#hero" class="brand-logo">GRAN MALO</a>
+    <ul class="nav-links">
+      <li><a href="#hero">Inicio</a></li>
+      <li><a href="#productos">Sabores</a></li>
+      <li><a href="#vibe">El Vibe</a></li>
+      <li><a href="#footer">Manifiesto</a></li>
+    </ul>
+    <span class="age-pill">+18 ONLY</span>
+  </header>
+
+  <!-- ========================================================================
+       2. HERO SECTION (100VH)
+       ======================================================================== -->
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-orb hero-orb--jamaica"></div>
+      <div class="hero-orb hero-orb--horchata"></div>
+
+      <div class="hero-content">
+        <div class="hero-kicker">LICOR CON TEQUILA • EDICIÓN NOCTURNA</div>
+        <h1 class="hero-title">
+          EL DESMADRE
+          <span>YA ESTÁ AQUÍ</span>
+        </h1>
+        <p class="hero-subtitle">
+          Dulce tentación, picor exacto y noches que brillan en neón. Destapa el lado más intenso de la fiesta con Gran
+          Malo.
+        </p>
+        <div class="hero-actions">
+          <a href="#productos" class="btn-neon">EXPLORAR SABORES</a>
+          <a href="#vibe" class="btn-glass">VER EL VIBE</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. SECCIÓN DE EXHIBICIÓN DE PRODUCTOS (VISOR 3D INTERACTIVO)
+         ====================================================================== -->
+    <section id="productos" class="products-section">
+      <div class="dynamic-stage-glow" id="stage-glow"></div>
+
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">EXPERIENCIA ESPACIAL INTERACTIVA</span>
+          <h2 class="section-title">ELIGE TU VENENO</h2>
+        </div>
+
+        <!-- Selector de sabores -->
+        <div class="flavor-selector" role="tablist" aria-label="Sabores de Gran Malo">
+          <button class="flavor-btn active" data-flavor="tamarindo" role="tab" aria-selected="true">
+            Spicy Tamarindo
+          </button>
+          <button class="flavor-btn" data-flavor="horchata" role="tab" aria-selected="false">
+            Horchata
+          </button>
+          <button class="flavor-btn" data-flavor="jamaica" role="tab" aria-selected="false">
+            Jamaica
+          </button>
+        </div>
+
+        <div class="showcase-grid">
+          <!-- Columna Izquierda: Escenario 3D con Parallax e Iluminación Dinámica -->
+          <div class="viewer-3d-stage">
+            <div class="viewer-3d-card" id="viewer-3d-card">
+              <div class="viewer-lighting-sheen"></div>
+              <div class="parallax-aura-ring" id="parallax-aura"></div>
+
+              <span class="parallax-floating-badge parallax-floating-badge--top" id="badge-top">
+                PICOR NEÓN
+              </span>
+              <span class="parallax-floating-badge parallax-floating-badge--bottom" id="badge-bottom">
+                SHOT FRÍO • 30% ALC. VOL.
+              </span>
+
+              <!-- Imágenes de las botellas desde la carpeta img/ -->
+              <div class="product-render-slot" id="product-render-slot">
+                <!-- TAMARINDO (#56070c + toques neón) -->
+                <img src="img/bot.png" alt="Botella Gran Malo Spicy Tamarindo" class="product-image-placeholder active"
+                  data-flavor-img="tamarindo" />
+                <!-- HORCHATA (Blanco #ffffff con #c7762c + toques neón) -->
+                <img src="img/bot.png" onerror="this.onerror=null; this.src='img/LGMTAM.png';"
+                  alt="Botella Gran Malo Horchata" class="product-image-placeholder" data-flavor-img="horchata" />
+                <!-- JAMAICA (#e00000 + toques neón) -->
+                <img src="img/LGMJAM.png" onerror="this.onerror=null; this.src='img/LGMTAM.png';"
+                  alt="Botella Gran Malo Jamaica" class="product-image-placeholder" data-flavor-img="jamaica" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Detalles sensoriales del sabor -->
+          <div class="product-details-panel">
+            <div class="flavor-subtitle" id="flavor-kicker">EL CLÁSICO PROHIBIDO</div>
+            <h3 class="flavor-name" id="flavor-title">SPICY TAMARINDO</h3>
+            <p class="flavor-description" id="flavor-desc">
+              Una explosión ácida y dulce de pulpa de tamarindo natural fusionada con chiles selectos y el golpe cálido
+              del tequila. Diseñado para servirse helado hasta empañar el cristal.
+            </p>
+
+            <div class="specs-grid">
+              <div class="spec-box">
+                <span class="spec-label">Notas</span>
+                <span class="spec-value" id="spec-notes">Ácido / Chile</span>
+              </div>
+              <div class="spec-box">
+                <span class="spec-label">Ritual</span>
+                <span class="spec-value" id="spec-serve">Shot -5°C</span>
+              </div>
+              <div class="spec-box">
+                <span class="spec-label">Energía</span>
+                <span class="spec-value" id="spec-vibe">Alta Tensión</span>
+              </div>
+            </div>
+
+            <a href="#vibe" class="btn-neon btn-flavor-cta" style="width: 100%; justify-content: center;">
+              ENCUENTRA TU BOTELLA
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. SECCIÓN DE "VIBE" (CUADRÍCULA ASIMÉTRICA)
+         ====================================================================== -->
+    <section id="vibe" class="vibe-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">CULTURA NOCTURNA</span>
+          <h2 class="section-title">LA NOCHE NO PIDE PERMISO</h2>
+        </div>
+
+        <div class="vibe-grid">
+          <article class="vibe-card vibe-card--1">
+            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1200&q=80"
+              alt="Fiesta nocturna con luces neón rojas" loading="lazy" />
+            <div class="vibe-overlay">
+              <span class="vibe-tag">02:45 AM • CLUB UNDERGROUND</span>
+              <h3 class="vibe-caption">Luces bajas, pulsos altos y rondas sin filtro</h3>
+            </div>
+          </article>
+
+          <article class="vibe-card vibe-card--2">
+            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80"
+              alt="Brindis nocturno" loading="lazy" />
+            <div class="vibe-overlay">
+              <span class="vibe-tag">HORCHATA VIBE</span>
+              <h3 class="vibe-caption">El primer shot abre el portal</h3>
+            </div>
+          </article>
+
+          <article class="vibe-card vibe-card--3">
+            <img src="https://images.unsplash.com/photo-1574096079513-d8259312b785?auto=format&fit=crop&w=900&q=80"
+              alt="Barra iluminada en tonos cálidos y neón" loading="lazy" />
+            <div class="vibe-overlay">
+              <span class="vibe-tag">TAMARINDO PICANTE</span>
+              <h3 class="vibe-caption">Escarchado con picor eléctrico</h3>
+            </div>
+          </article>
+
+          <article class="vibe-card vibe-card--4">
+            <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80"
+              alt="DJ set con atmósfera neón intensa" loading="lazy" />
+            <div class="vibe-overlay">
+              <span class="vibe-tag">AFTERHOURS</span>
+              <h3 class="vibe-caption">Donde los buenos se vuelven Gran Malo</h3>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       5. FOOTER & ADVERTENCIA +18
+       ======================================================================== -->
+  <footer id="footer" class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <a href="#hero" class="brand-logo">GRAN MALO</a>
+        <ul class="footer-links">
+          <li><a href="#productos">Sabores</a></li>
+          <li><a href="#vibe">Comunidad</a></li>
+          <li><a href="#footer">Términos de Uso</a></li>
+          <li><a href="#footer">Privacidad</a></li>
+          <li><a href="https://www.alcoholinformate.org.mx" target="_blank" rel="noopener noreferrer">Consumo
+              Responsable</a></li>
+        </ul>
+      </div>
+
+      <div class="responsible-banner">
+        <strong>EVITA EL EXCESO • PROHIBIDA SU VENTA A MENORES DE 18 AÑOS</strong>
+        <p>© 2026 GRAN MALO. Todos los derechos reservados. Diseñado para mayores de edad (+18).</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       JAVASCRIPT: PRELOADER DE 10S + MOTOR 3D & ILUMINACIÓN REACTIVA
+       ======================================================================== -->
+  <script>
+    (function () {
+      /* ----------------------------------------------------------------------
+         1. LÓGICA ESTRICTA DE LOS 10 SEGUNDOS DEL PRELOADER
+         ---------------------------------------------------------------------- */
+      const PRELOADER_DURATION_MS = 5000; // Exactamente 10 segundos
+      const preloaderWrapper = document.getElementById('preloader-wrapper');
+      const loadElement = document.getElementById('load');
+
+      setTimeout(() => {
+        loadElement.classList.add('fade-out');
+        preloaderWrapper.classList.add('fade-out');
+        document.body.classList.remove('is-loading');
+
+        setTimeout(() => {
+          loadElement.style.display = 'none';
+          preloaderWrapper.style.display = 'none';
+          preloaderWrapper.remove();
+        }, 1000);
+      }, PRELOADER_DURATION_MS);
+
+      /* ----------------------------------------------------------------------
+         2. DATOS Y TEMAS DE ILUMINACIÓN NEÓN POR SABOR
+            - Tamarindo: #56070c + toques neón (#ff1e42)
+            - Horchata:  Blanco (#ffffff) con #c7762c + toques neón (#ffae42)
+            - Jamaica:   #e00000 + toques neón (#ff2a2a)
+         ---------------------------------------------------------------------- */
+      const FLAVORS = {
+        tamarindo: {
+          kicker: 'EL CLÁSICO PROHIBIDO',
+          title: 'SPICY TAMARINDO',
+          desc: 'Una explosión ácida y dulce de pulpa de tamarindo natural fusionada con chiles selectos y el golpe cálido del tequila. Diseñado para servirse helado hasta empañar el cristal.',
+          notes: 'Ácido / Chile',
+          serve: 'Shot -5°C',
+          vibe: 'Alta Tensión',
+          badgeTop: 'PICOR NEÓN',
+          base: '#56070c',
+          accent: '#ff1e42',
+          secondary: '#e00000',
+          surface: 'rgba(86, 7, 12, 0.68)'
+        },
+        horchata: {
+          kicker: 'DULZURA PELIGROSA',
+          title: 'HORCHATA NEÓN',
+          desc: 'Cremosidad blanca sedosa con canela tostada, vainilla nocturna y el espíritu rebelde del tequila. Un contraste hipnótico entre suavidad aterciopelada y destellos ámbar neón.',
+          notes: 'Canela / Crema',
+          serve: 'En las Rocas',
+          vibe: 'Blanco & Canela',
+          badgeTop: 'SEDA CANELA',
+          base: '#c7762c',
+          accent: '#ffffff',
+          secondary: '#ffae42',
+          surface: 'rgba(199, 118, 44, 0.45)'
+        },
+        jamaica: {
+          kicker: 'ELIXIR ELÉCTRICO',
+          title: 'JAMAICA INTENSA',
+          desc: 'Flor de jamaica roja profunda con un toque cítrico y especiado que enciende el paladar. Frescura botánica envuelta en destellos carmesí y neón eléctrico.',
+          notes: 'Floral / Ácido',
+          serve: 'Shot Glacial',
+          vibe: 'Rojo Eléctrico',
+          badgeTop: 'ROJO JAMAICA',
+          base: '#e00000',
+          accent: '#e00000',
+          secondary: '#ff2a2a',
+          surface: 'rgba(224, 0, 0, 0.48)'
+        }
+      };
+
+      const root = document.documentElement;
+      const viewerCard = document.getElementById('viewer-3d-card');
+      const renderSlot = document.getElementById('product-render-slot');
+      const parallaxAura = document.getElementById('parallax-aura');
+      const flavorBtns = document.querySelectorAll('.flavor-btn');
+      const angleBtns = document.querySelectorAll('.angle-btn');
+      const productImages = document.querySelectorAll('.product-image-placeholder');
+
+      const kickerEl = document.getElementById('flavor-kicker');
+      const titleEl = document.getElementById('flavor-title');
+      const descEl = document.getElementById('flavor-desc');
+      const notesEl = document.getElementById('spec-notes');
+      const serveEl = document.getElementById('spec-serve');
+      const vibeEl = document.getElementById('spec-vibe');
+      const badgeTopEl = document.getElementById('badge-top');
+
+      let baseRotateX = 0;
+      let baseRotateY = 0;
+
+      /* Cambio de sabor con rotación espacial 3D y cambio de luz ambiental */
+      flavorBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const flavorKey = btn.getAttribute('data-flavor');
+          const data = FLAVORS[flavorKey];
+          if (!data) return;
+
+          flavorBtns.forEach((b) => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+
+          root.style.setProperty('--active-base', data.base);
+          root.style.setProperty('--active-accent', data.accent);
+          root.style.setProperty('--active-secondary', data.secondary);
+          root.style.setProperty('--active-surface', data.surface);
+
+          viewerCard.classList.remove('is-spinning-3d');
+          void viewerCard.offsetWidth;
+          viewerCard.classList.add('is-spinning-3d');
+
+          productImages.forEach((img) => {
+            const isMatch = img.getAttribute('data-flavor-img') === flavorKey;
+            img.classList.toggle('active', isMatch);
+          });
+
+          kickerEl.textContent = data.kicker;
+          titleEl.textContent = data.title;
+          descEl.textContent = data.desc;
+          notesEl.textContent = data.notes;
+          serveEl.textContent = data.serve;
+          vibeEl.textContent = data.vibe;
+          badgeTopEl.textContent = data.badgeTop;
+        });
+      });
+
+      /* Cambio de ángulo de cámara 3D */
+      const ANGLES = {
+        'front': { rx: 0, ry: 0, slotZ: 115, slotRy: 0 },
+        'tilt-left': { rx: 6, ry: -24, slotZ: 135, slotRy: -12 },
+        'tilt-right': { rx: 6, ry: 24, slotZ: 135, slotRy: 12 },
+        'hero-low': { rx: 16, ry: -10, slotZ: 145, slotRy: 8 }
+      };
+
+      angleBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const angleKey = btn.getAttribute('data-angle');
+          const preset = ANGLES[angleKey] || ANGLES.front;
+
+          angleBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          baseRotateX = preset.rx;
+          baseRotateY = preset.ry;
+
+          viewerCard.style.transform = `rotateX(${baseRotateX}deg) rotateY(${baseRotateY}deg)`;
+          renderSlot.style.transform = `translateZ(${preset.slotZ}px) rotateY(${preset.slotRy}deg)`;
+        });
+      });
+
+      /* ----------------------------------------------------------------------
+         3. PARALLAX 3D INTERACTIVO Y LUZ DINÁMICA CON PUNTERO / TOUCH
+         ---------------------------------------------------------------------- */
+      function handlePointerMove(clientX, clientY) {
+        const rect = viewerCard.getBoundingClientRect();
+        const relX = (clientX - rect.left) / rect.width;
+        const relY = (clientY - rect.top) / rect.height;
+
+        const clampedX = Math.max(0, Math.min(1, relX));
+        const clampedY = Math.max(0, Math.min(1, relY));
+
+        const tiltY = (clampedX - 0.5) * 26 + baseRotateY;
+        const tiltX = (0.5 - clampedY) * 22 + baseRotateX;
+
+        viewerCard.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
+        renderSlot.style.transform = `translateZ(130px) translateX(${((clampedX - 0.5) * 18).toFixed(1)}px) translateY(${((clampedY - 0.5) * 14).toFixed(1)}px)`;
+        parallaxAura.style.transform = `translateZ(20px) translateX(${((0.5 - clampedX) * 24).toFixed(1)}px) translateY(${((0.5 - clampedY) * 24).toFixed(1)}px)`;
+
+        root.style.setProperty('--light-x', `${(clampedX * 100).toFixed(1)}%`);
+        root.style.setProperty('--light-y', `${(clampedY * 100).toFixed(1)}%`);
+      }
+
+      viewerCard.addEventListener('mousemove', (e) => {
+        handlePointerMove(e.clientX, e.clientY);
+      });
+
+      viewerCard.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          const touch = e.touches[0];
+          handlePointerMove(touch.clientX, touch.clientY);
+        }
+      }, { passive: true });
+
+      viewerCard.addEventListener('mouseleave', () => {
+        viewerCard.style.transform = `rotateX(${baseRotateX}deg) rotateY(${baseRotateY}deg)`;
+        renderSlot.style.transform = `translateZ(115px)`;
+        parallaxAura.style.transform = `translateZ(20px)`;
+        root.style.setProperty('--light-x', '50%');
+        root.style.setProperty('--light-y', '45%');
+      });
+    })();
+  </script>
+</body>
+
+</html>
